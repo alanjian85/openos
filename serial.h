@@ -4,12 +4,12 @@
 #include <stdint.h>
 #include <stddef.h>
 
-#define SERIAL_COM1_BASE 0x3F8
+void serial_init(uint8_t port, uint16_t divisor);
 
-void serial_config_baud_rate(uint16_t com, uint16_t divisor);
+void serial_put(uint8_t port, char c);
 
-void serial_init(uint16_t com);
+void serial_puts(uint8_t port, const char* str);
 
-void serial_write(const char* buf, size_t len);
+void serial_write(uint8_t port, const char* buf, size_t count);
 
 #endif

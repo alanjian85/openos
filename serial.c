@@ -2,39 +2,45 @@
 
 #include "io.h"
 
-#define SERIAL_DATA_PORT(base)          (base)
-#define SERIAL_FIFO_COMMAND_PORT(base)  (base + 2)
-#define SERIAL_LINE_COMMAND_PORT(base)  (base + 3)
-#define SERIAL_MODEM_COMMAND_PORT(base) (base + 4)
-#define SERIAL_LINE_STATUS_PORT(base)   (base + 5)
+#define SERIAL_DATA_PORT(port)          (ports_base[port - 1])
+#define SERIAL_FIFO_COMMAND_PORT(port)  (ports_base[port - 1] + 2)
+#define SERIAL_LINE_COMMAND_PORT(port)  (ports_base[port - 1] + 3)
+#define SERIAL_MODEM_COMMAND_PORT(port) (ports_base[port - 1] + 4)
+#define SERIAL_LINE_STATUS_PORT(port)   (ports_base[port - 1] + 5)
 
 #define SERIAL_LINE_ENABLE_DLAB         0x80
 
-void serial_config_baud_rate(uint16_t com, uint16_t divisor) {
-    outb(SERIAL_LINE_COMMAND_PORT(com),
-         SERIAL_LINE_ENABLE_DLAB);
-    outb(SERIAL_DATA_PORT(com),
-         (divisor >> 8) & 0x00FF);
-    outb(SERIAL_DATA_PORT(com),
-         divisor & 0x00FF);
+static uint16_t ports_base[8] = {
+     0x3F8, 0x2F8, 0x3E8, 0x2E8, 0x5F8, 0x4F8, 0x5E8, 0x4E8
+};
+
+void serial_init(uint8_t port, uint16_t divisor) {
+     outb(SERIAL_LINE_COMMAND_PORT(port), SERIAL_LINE_ENABLE_DLAB);
+     outb(SERIAL_DATA_PORT(port), (divisor >> 8) & 0x00FF);
+     outb(SERIAL_DATA_PORT(port), divisor & 0x00FF);
+
+     outb(SERIAL_LINE_COMMAND_PORT(port), 0x03);
+     outb(SERIAL_FIFO_COMMAND_PORT(port), 0xC7);
+     outb(SERIAL_MODEM_COMMAND_PORT(port), 0x03);
 }
 
-void serial_init(uint16_t com) {
-     serial_config_baud_rate(com, 0x03);
-     outb(SERIAL_LINE_COMMAND_PORT(com), 0x03);
-     outb(SERIAL_FIFO_COMMAND_PORT(com), 0xC7);
-     outb(SERIAL_MODEM_COMMAND_PORT(com), 0x03);
-}
-
-static int serial_fifo_empty(uint16_t com) {
-     return inb(SERIAL_LINE_STATUS_PORT(com)) & 0x20;
-}
-
-void serial_write(const char* buf, size_t len) {
-     for (unsigned int i = 0; i < len; ++i) {
-          while (!serial_fifo_empty(SERIAL_COM1_BASE)) {
+void serial_put(uint8_t port, char c) {
+     while (!(inb(SERIAL_LINE_STATUS_PORT(port)) & 0x20)) {
           
-          }
-          outb(SERIAL_DATA_PORT(SERIAL_COM1_BASE), buf[i]);
+     }
+
+     outb(SERIAL_DATA_PORT(port), c);
+}
+
+void serial_puts(uint8_t port, const char* str) {
+     while (*str != '\0') {
+          serial_put(port, *str);
+          ++str;
+     }
+}
+
+void serial_write(uint8_t port, const char* buf, size_t count) {
+     for (unsigned int i = 0; i < count; ++i) {
+          serial_put(port, buf[i]);
      }
 }
