@@ -6,7 +6,6 @@ void kmain() {
     fb_clear();
     
     serial_puts(1, "Hello world!\n");
-    fb_puts(FB_COLOR_WHITE, "OpenOS\n");
-    fb_puts(FB_COLOR_BLUE, "VERSION 1.0.0\n");
-    fb_puts(FB_COLOR_YELLOW, "\nHello world\n");
+    fb_move_cursor(1920);
+    fb_puts(FB_COLOR_WHITE, "Hello\vWorld\vVersion\v1.0.0\n");
 }

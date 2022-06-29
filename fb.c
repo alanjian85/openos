@@ -39,11 +39,52 @@ void fb_move_cursor(uint16_t pos) {
     outb(FB_DATA_PORT, pos & 0x00FF);
 }
 
+void fb_scroll() {
+    if (fb_cursor >= 80) {
+        fb_move_cursor(fb_cursor - 80);
+    }
+    for (uint16_t i = 0; i < 1920; ++i) {
+        fb[i << 1] = fb[(i + 80) << 1];
+        fb[(i << 1) | 1] = fb[((i + 80) << 1) | 1];
+    }
+    for (uint16_t i = 1920; i < 2000; ++i) {
+        fb[i << 1] = ' ';
+        fb[(i << 1) | 1] = ((fb_bg & 0x0F) << 4) | (FB_COLOR_WHITE & 0x0F);
+    }
+}
+
 void fb_put(fb_color_t fg, char c) {
-    if (c == '\n') {
-        fb_move_cursor((fb_cursor) / 80 * 80 + 80);
+    if (c == '\a') {
+        // do nothing
+    } else if (c == '\b') {
+        if (fb_cursor > 0) {
+            fb_cursor -= 1;
+        }
+    } else if (c == '\f') {
+        fb_cursor = 0;
+        fb_clear();
+    } else if (c == '\n') {
+        if (fb_cursor >= 1920) {
+            fb_scroll();
+        }
+        fb_move_cursor(fb_cursor / 80 * 80 + 80);
+    } else if (c == '\r') {
+        fb_move_cursor(fb_cursor / 80 * 80);
+    } else if (c == '\t') {
+        if (fb_cursor >= 1992) {
+            fb_scroll();
+        }
+        fb_move_cursor(fb_cursor / 8 * 8 + 8);
+    } else if (c == '\v') {
+        if (fb_cursor >= 1920) {
+            fb_scroll();
+        }
+        fb_move_cursor(fb_cursor / 80 * 80 + 80 + fb_cursor % 80);
     } else {
         fb_write_pos(fb_cursor, fg, c);
+        if (fb_cursor == 1999) {
+            fb_scroll();
+        }
         fb_move_cursor(fb_cursor + 1);
     }
 }
