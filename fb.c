@@ -1,3 +1,5 @@
+#include "fb.h"
+
 #include "io.h"
 
 #define FB_COMMAND_PORT 0x3D4
@@ -18,4 +20,12 @@ void fb_move_cursor(unsigned short pos) {
     outb(FB_DATA_PORT, (pos >> 8) & 0x00FF);
     outb(FB_COMMAND_PORT, FB_LOW_BYTE_COMMAND);
     outb(FB_DATA_PORT, pos & 0x00FF);
+}
+
+int fb_write(const char* buf, unsigned int len) {
+    for (unsigned int i = 0; i < len; ++i) {
+        fb_write_cell(i * 2, buf[i], FB_GREEN, FB_DARK_GREY);
+        fb_move_cursor(i + 1);
+    }
+    return 0;
 }

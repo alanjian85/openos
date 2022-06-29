@@ -1,4 +1,5 @@
 global outb
+global inb
 
 outb:
     mov al, [esp + 8]
