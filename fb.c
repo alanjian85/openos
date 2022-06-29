@@ -22,7 +22,7 @@ void fb_set_bg(fb_color_t bg) {
 void fb_clear() {
     for (uint16_t i = 0; i < 2000; ++i) {
         fb[i << 1] = ' ';
-        fb[(i << 1) | 1] = ((fb_bg & 0x0F) << 4) | (fb_bg & 0x0F);
+        fb[(i << 1) | 1] = ((fb_bg & 0x0F) << 4) | (FB_COLOR_WHITE & 0x0F);
     }
 }
 
@@ -40,8 +40,12 @@ void fb_move_cursor(uint16_t pos) {
 }
 
 void fb_put(fb_color_t fg, char c) {
-    fb_write_pos(fb_cursor, fg, c);
-    fb_move_cursor(fb_cursor + 1);
+    if (c == '\n') {
+        fb_move_cursor((fb_cursor) / 80 * 80 + 80);
+    } else {
+        fb_write_pos(fb_cursor, fg, c);
+        fb_move_cursor(fb_cursor + 1);
+    }
 }
 
 void fb_puts(fb_color_t fg, const char* str) {
