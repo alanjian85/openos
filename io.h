@@ -1,8 +1,10 @@
 #ifndef IO_H
 #define IO_H
 
-void outb(unsigned short port, unsigned char data);
+#include <stdint.h>
 
-unsigned char inb(unsigned short port);
+void outb(uint16_t port, uint8_t data);
+
+unsigned char inb(uint16_t port);
 
 #endif
