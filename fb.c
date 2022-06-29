@@ -10,9 +10,19 @@
 
 static char *fb = (char*) 0x000B8000;
 
-void fb_write_cell(unsigned int i, char c, unsigned char fg, unsigned char bg) {
+void fb_write_cell(unsigned int i, char c, unsigned char bg, unsigned char fg) {
     fb[i] = c;
-    fb[i + 1] = ((fg & 0x0F) << 4) | (bg & 0x0F);
+    fb[i + 1] = ((bg & 0x0F) << 4) | (fg & 0x0F);
+}
+
+void fb_fill(char c, unsigned char bg, unsigned char fg) {
+    for (int i = 0; i < 2000; ++i) {
+        fb_write_cell(i << 1, c, bg, fg);
+    }
+}
+
+void fb_clear(unsigned char bg) {
+    fb_fill(' ', FB_BLACK, bg);
 }
 
 void fb_move_cursor(unsigned short pos) {
@@ -22,9 +32,9 @@ void fb_move_cursor(unsigned short pos) {
     outb(FB_DATA_PORT, pos & 0x00FF);
 }
 
-int fb_write(const char* buf, unsigned int len) {
+int fb_write(const char* buf, unsigned int len, unsigned char bg, unsigned char fg) {
     for (unsigned int i = 0; i < len; ++i) {
-        fb_write_cell(i * 2, buf[i], FB_GREEN, FB_DARK_GREY);
+        fb_write_cell(i << 1, buf[i], bg, fg);
         fb_move_cursor(i + 1);
     }
     return 0;
