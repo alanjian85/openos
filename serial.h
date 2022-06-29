@@ -10,6 +10,6 @@ void serial_put(uint8_t port, char c);
 
 void serial_puts(uint8_t port, const char* str);
 
-void serial_write(uint8_t port, const char* buf, size_t count);
+void serial_write(uint8_t port, const void* buf, size_t count);
 
 #endif

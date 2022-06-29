@@ -2,8 +2,9 @@
 #include "serial.h"
 
 void kmain() {
-    fb_clear(FB_BLACK);
+    fb_clear();
     serial_init(1, 3);
     serial_puts(1, "Hello world!\n");
-    fb_write("Hello world!", 12, FB_BLACK, FB_WHITE);
+    fb_write(FB_COLOR_WHITE, "Hello world! ", 13);
+    fb_write(FB_COLOR_GREEN, "VERSION 1.0.0", 13);
 }

@@ -4,19 +4,25 @@
 #include <stdint.h>
 #include <stddef.h>
 
-#define FB_BLACK     0x0
-#define FB_GREEN     0x2
-#define FB_DARK_GREY 0x8
-#define FB_WHITE     0xF
+typedef enum fb_color {
+    FB_COLOR_BLACK = 0x0,
+    FB_COLOR_GREEN = 0x2,
+    FB_COLOR_DARK_GREY = 0x8,
+    FB_COLOR_WHITE = 0xF
+} fb_color_t;
 
-void fb_write_cell(uint16_t i, char c, uint8_t bg, uint8_t fg);
+void fb_set_bg(fb_color_t bg);
 
-void fb_fill(char c, uint8_t bg, uint8_t fg);
+void fb_clear();
 
-void fb_clear(uint8_t bg);
+void fb_write_pos(uint16_t pos, fb_color_t fg, char c);
 
 void fb_move_cursor(uint16_t pos);
 
-int fb_write(const char* buf, size_t len, uint8_t bg, uint8_t fg);
+void fb_put(fb_color_t fg, char c);
+
+void fb_puts(fb_color_t fg, const char* str);
+
+void fb_write(fb_color_t fg, const void* buf, size_t count);
 
 #endif
