@@ -5,6 +5,6 @@
 
 void outb(uint16_t port, uint8_t data);
 
-unsigned char inb(uint16_t port);
+uint8_t inb(uint16_t port);
 
 #endif
