@@ -5,7 +5,8 @@ OBJECTS = build/loader.o 		\
 		  build/serial.o 		\
 		  build/interrupt.o 	\
 		  build/interrupt_asm.o \
-		  build/pic.o
+		  build/pic.o			\
+		  build/keyboard.o
 CC = gcc
 CFLAGS = -m32 -nostdlib -fno-builtin -fno-stack-protector \
 		 -nostartfiles -nodefaultlibs -Wall -Wextra -Werror -c
