@@ -36,7 +36,7 @@ void pic_init() {
     outb(PIC1_PORT_B, PIC1_ICW4);
     outb(PIC1_PORT_B, PIC2_ICW4);
 
-    outb(PIC1_PORT_B, 0xEC);
+    outb(PIC1_PORT_B, 0xFD);
     outb(PIC2_PORT_B, 0xFF);
 }
 

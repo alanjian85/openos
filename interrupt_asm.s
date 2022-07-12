@@ -1,9 +1,3 @@
-global load_idt
-load_idt:
-    mov eax, [esp + 4]
-    lidt [eax]
-    ret
-
 %macro no_error_code_interrupt_handler 1
 global interrupt_handler_%1
 interrupt_handler_%1:
@@ -43,3 +37,5 @@ common_interrupt_handler:
     add esp, 8
 
     iret
+
+no_error_code_interrupt_handler 1

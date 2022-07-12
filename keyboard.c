@@ -19,7 +19,9 @@ typedef struct keyboard_fifo {
 
 keyboard_fifo_t keyboard_buffer;
 
-void keyboard_interrupt_handler(struct cpu_state cpu, struct stack_state stack) {
+char keyboard_scancode_to_ascii(uint8_t scancode);
+
+void keyboard_interrupt_handler(cpu_state_t cpu, stack_state_t stack) {
     (void) cpu;
     (void) stack;
 
@@ -32,6 +34,8 @@ void keyboard_interrupt_handler(struct cpu_state cpu, struct stack_state stack) 
     }
 }
 
+extern void interrupt_handler_1();
+
 void keyboard_init() {
     keyboard_buffer.head = keyboard_buffer.tail = keyboard_buffer.buffer;
     keyboard_buffer.size = 0;
@@ -39,10 +43,17 @@ void keyboard_init() {
 
 char keyboard_getc() {
     while (keyboard_buffer.size == 0);
-    char c = *keyboard_buffer.head++;
+    char c = keyboard_scancode_to_ascii(*keyboard_buffer.head++);
     --keyboard_buffer.size;
     if (keyboard_buffer.head == keyboard_buffer.buffer + KEYBOARD_BUFFER_SIZE) {
         keyboard_buffer.head = keyboard_buffer.buffer;
     }
     return c;
+}
+
+char keyboard_scancode_to_ascii(uint8_t scancode) {
+    switch (scancode) {
+    default:
+        return 'A';
+    }
 }
