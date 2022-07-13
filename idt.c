@@ -17,11 +17,19 @@ typedef struct idt_ref {
 
 void load_idt(idt_ref_t* idt);
 
+void interrupt_handler_1();
+
 void idt_init() {
     idt_gate_t gates[256] = {};
     idt_ref_t idt;
     idt.limit = sizeof(gates);
     idt.base = gates;
+    
+    gates[1].offset_low     = (uint32_t) interrupt_handler_1 & 0xFFFF;
+    gates[1].offset_high    = ((uint32_t) interrupt_handler_1 >> 16) & 0xFFFF;
+    gates[1].segsel         = 0x0008;
+    gates[1].zero           = 0;
+    gates[1].config         = 0x8F;
 
     load_idt(&idt);
 }

@@ -5,8 +5,8 @@
 #include "idt.h"
 
 void kmain() {
-    pic_init();
     idt_init();
+    pic_init();
     keyboard_init();
     serial_init(1, 3);
     fb_clear();
