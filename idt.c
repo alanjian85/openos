@@ -10,26 +10,26 @@ typedef struct idt_gate {
     uint16_t offset_high;
 } __attribute__((packed)) idt_gate_t;
 
-typedef struct idt_ref {
-    uint16_t limit;
-    idt_gate_t* base;
-} __attribute__((packed)) idt_ref_t;
+typedef struct idt {
+    uint16_t size;
+    idt_gate_t* addr;
+} __attribute__((packed)) idt_t;
 
-void load_idt(idt_ref_t* idt);
+void load_idt(idt_t* idt);
 
-void interrupt_handler_1();
+void interrupt_handler_33();
 
 void idt_init() {
     idt_gate_t gates[256] = {};
-    idt_ref_t idt;
-    idt.limit = sizeof(gates);
-    idt.base = gates;
-    
-    gates[1].offset_low     = (uint32_t) interrupt_handler_1 & 0xFFFF;
-    gates[1].offset_high    = ((uint32_t) interrupt_handler_1 >> 16) & 0xFFFF;
-    gates[1].segsel         = 0x0008;
-    gates[1].zero           = 0;
-    gates[1].config         = 0x8F;
+    idt_t idt;
+    idt.addr = gates;
+    idt.size = sizeof(gates);
+
+    gates[33].offset_low     = (uint32_t) interrupt_handler_33 & 0xFFFF;
+    gates[33].offset_high    = ((uint32_t) interrupt_handler_33 >> 16) & 0xFFFF;
+    gates[33].segsel         = 0x0008;
+    gates[33].zero           = 0;
+    gates[33].config         = 0x8F;
 
     load_idt(&idt);
 }

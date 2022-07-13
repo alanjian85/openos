@@ -38,4 +38,4 @@ common_interrupt_handler:
 
     iret
 
-no_error_code_interrupt_handler 1
+no_error_code_interrupt_handler 33
