@@ -21,8 +21,12 @@ all: build/kernel.elf
 build/kernel.elf: $(OBJECTS)
 	ld $(LDFLAGS) $(OBJECTS) -o build/kernel.elf
 
-os.iso: build/kernel.elf
+build/program: program.s
+	nasm -f bin program.s -o build/program
+
+build/os.iso: build/kernel.elf build/program
 	cp build/kernel.elf build/iso/boot/kernel.elf
+	cp build/program	build/iso/modules
 	genisoimage -R								  \
 				-b boot/grub/stage2_eltorito	  \
 				-no-emul-boot					  \
@@ -34,7 +38,7 @@ os.iso: build/kernel.elf
 				-o build/os.iso					  \
 				build/iso
 
-run: os.iso
+run: build/os.iso
 	qemu-system-i386 -cdrom build/os.iso -serial stdio
 
 build/%.o: %.c

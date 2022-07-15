@@ -5,7 +5,9 @@
 #include "idt.h"
 #include "interrupt.h"
 
-void kmain() {
+void kmain(uint32_t ebx) {
+    (void) ebx;
+
     pic_init();
     idt_init();
     enable_interrupt();
