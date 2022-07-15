@@ -8,7 +8,7 @@
 
 void kmain() {
     pic_init();
-    gdt_init();
+    //gdt_init();
     idt_init();
     enable_interrupt();
     keyboard_init();
@@ -25,7 +25,7 @@ void kmain() {
 
     while (1) {
         char c = keyboard_getc();
-        char buf[] = "Pressed the key ?";
+        char buf[] = "Pressed the key ?\n";
         buf[16] = c;
         fb_puts(FB_COLOR_WHITE, buf);
     }

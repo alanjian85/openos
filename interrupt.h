@@ -13,6 +13,11 @@ typedef struct cpu_state {
     uint32_t eax;
 } __attribute__((packed)) cpu_state_t;
 
+typedef struct interrupt_state {
+    uint32_t interrupt;
+    uint32_t error_code;
+} __attribute__((packed)) interrupt_state_t;
+
 typedef struct stack_state {
     uint32_t error_code;
     uint32_t eip;
@@ -20,7 +25,7 @@ typedef struct stack_state {
     uint32_t eflags;
 } __attribute__((packed)) stack_state_t;
 
-void interrupt_handler(cpu_state_t cpu, stack_state_t stack, uint32_t interrupt);
+void interrupt_handler(cpu_state_t cpu, interrupt_state_t interrupt, stack_state_t stack);
 
 void enable_interrupt();
 

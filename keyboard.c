@@ -5,6 +5,7 @@
 
 #include "interrupt.h"
 #include "io.h"
+#include "serial.h"
 
 #define KEYBOARD_BUFFER_SIZE 100
 

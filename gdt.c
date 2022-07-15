@@ -13,7 +13,7 @@ typedef struct gdt_entry {
 
 typedef struct gdt_ptr {
     uint16_t limit;
-    gdt_entry_t* base;
+    uint32_t base;
 } __attribute__((packed)) gdt_ptr_t;
 
 void load_gdt(gdt_ptr_t* idt);
@@ -21,7 +21,7 @@ void load_gdt(gdt_ptr_t* idt);
 void gdt_init() {
     gdt_entry_t gdt_entries[3] = {};
     gdt_ptr_t gdt_ptr;
-    gdt_ptr.base = gdt_entries;
+    gdt_ptr.base = (uint32_t) gdt_entries;
     gdt_ptr.limit = sizeof(gdt_entries);
 
     gdt_entries[1].base_low = 0;
