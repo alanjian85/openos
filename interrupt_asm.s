@@ -39,3 +39,8 @@ common_interrupt_handler:
     iret
 
 no_error_code_interrupt_handler 33
+
+global enable_interrupt
+enable_interrupt:
+    sti
+    ret

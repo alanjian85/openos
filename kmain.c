@@ -4,11 +4,13 @@
 #include "keyboard.h"
 #include "gdt.h"
 #include "idt.h"
+#include "interrupt.h"
 
 void kmain() {
     pic_init();
     gdt_init();
     idt_init();
+    enable_interrupt();
     keyboard_init();
     serial_init(1, 3);
     fb_clear();

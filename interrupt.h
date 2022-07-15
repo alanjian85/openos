@@ -22,4 +22,6 @@ typedef struct stack_state {
 
 void interrupt_handler(cpu_state_t cpu, stack_state_t stack, uint32_t interrupt);
 
+void enable_interrupt();
+
 #endif
