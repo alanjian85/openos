@@ -2,34 +2,34 @@
 
 #include <stdint.h>
 
-typedef struct idt_gate {
+typedef struct idt_entry {
     uint16_t offset_low;
     uint16_t segsel;
     uint8_t zero;
     uint8_t config;
     uint16_t offset_high;
-} __attribute__((packed)) idt_gate_t;
+} __attribute__((packed)) idt_entry_t;
 
-typedef struct idt {
-    uint16_t size;
-    idt_gate_t* addr;
-} __attribute__((packed)) idt_t;
+typedef struct idt_ptr {
+    uint16_t limit;
+    idt_entry_t* base;
+} __attribute__((packed)) idt_ptr_t;
 
-void load_idt(idt_t* idt);
+void load_idt(idt_ptr_t* idt);
 
 void interrupt_handler_33();
 
 void idt_init() {
-    idt_gate_t gates[256] = {};
-    idt_t idt;
-    idt.addr = gates;
-    idt.size = sizeof(gates);
+    idt_entry_t gdt_entries[256] = {};
+    idt_ptr_t idt;
+    idt.base = gdt_entries;
+    idt.limit = sizeof(gdt_entries);
 
-    gates[33].offset_low     = (uint32_t) interrupt_handler_33 & 0xFFFF;
-    gates[33].offset_high    = ((uint32_t) interrupt_handler_33 >> 16) & 0xFFFF;
-    gates[33].segsel         = 0x0008;
-    gates[33].zero           = 0;
-    gates[33].config         = 0x8F;
+    gdt_entries[33].offset_low     = (uint32_t) interrupt_handler_33 & 0xFFFF;
+    gdt_entries[33].offset_high    = ((uint32_t) interrupt_handler_33 >> 16) & 0xFFFF;
+    gdt_entries[33].segsel         = 0x0008;
+    gdt_entries[33].zero           = 0;
+    gdt_entries[33].config         = 0x8F;
 
     load_idt(&idt);
 }
