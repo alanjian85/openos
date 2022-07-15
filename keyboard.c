@@ -22,8 +22,9 @@ keyboard_fifo_t keyboard_buffer;
 
 char keyboard_scancode_to_ascii(uint8_t scancode);
 
-void keyboard_interrupt_handler(cpu_state_t cpu, stack_state_t stack) {
+void keyboard_interrupt_handler(cpu_state_t cpu, interrupt_state_t interrupt, stack_state_t stack) {
     (void) cpu;
+    (void) interrupt;
     (void) stack;
 
     if (keyboard_buffer.size < KEYBOARD_BUFFER_SIZE) {
@@ -56,7 +57,11 @@ char keyboard_scancode_to_ascii(uint8_t scancode) {
     switch (scancode) {
     case 0x1E:
         return 'A';
+    case 0x9E:
+        return 'A';
     case 0x30:
+        return 'B';
+    case 0xB0:
         return 'B';
     }
     return ' ';

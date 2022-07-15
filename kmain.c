@@ -7,8 +7,8 @@
 #include "interrupt.h"
 
 void kmain() {
+    gdt_init();
     pic_init();
-    //gdt_init();
     idt_init();
     enable_interrupt();
     keyboard_init();

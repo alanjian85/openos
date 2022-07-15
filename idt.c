@@ -28,8 +28,8 @@ void idt_init() {
     idt_entries[33].offset_low     = (uint32_t) interrupt_handler_33 & 0xFFFF;
     idt_entries[33].offset_high    = ((uint32_t) interrupt_handler_33 >> 16) & 0xFFFF;
     idt_entries[33].segsel         = 0x0008;
-    idt_entries[33].zero           = 0;
-    idt_entries[33].config         = 0x8F;
+    idt_entries[33].zero           = 0x00;
+    idt_entries[33].config         = 0x8E;
 
     load_idt(&idt);
 }

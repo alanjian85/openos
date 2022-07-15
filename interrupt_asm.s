@@ -16,6 +16,8 @@ interrupt_handler_%1:
 extern interrupt_handler
 
 common_interrupt_handler:
+    cli
+
     push eax
     push ebx
     push ecx
@@ -35,6 +37,7 @@ common_interrupt_handler:
     pop eax
 
     add esp, 8
+    sti
 
     iret
 

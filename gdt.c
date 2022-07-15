@@ -28,15 +28,15 @@ void gdt_init() {
     gdt_entries[1].base_mid = 0;
     gdt_entries[1].base_high = 0;
     gdt_entries[1].limit_low = 0xFFFF;
-    gdt_entries[1].granularity = (0x01 << 7) | (0x01 << 6) | 0x0F;
-    gdt_entries[1].access = (0x01 << 7) | (0x01 << 4) | 0xA;
+    gdt_entries[1].granularity = 0xCF;
+    gdt_entries[1].access = 0x9A;
 
     gdt_entries[2].base_low = 0;
     gdt_entries[2].base_mid = 0;
     gdt_entries[2].base_high = 0;
     gdt_entries[2].limit_low = 0xFFFF;
-    gdt_entries[2].granularity = (0x01 << 7) | (0x01 << 6) | 0x0F;
-    gdt_entries[2].access = (0x01 << 7) | (0x01 << 4) | 0x2;
+    gdt_entries[2].granularity = 0xCF;
+    gdt_entries[2].access = 0x92;
 
     load_gdt(&gdt_ptr);
 }
