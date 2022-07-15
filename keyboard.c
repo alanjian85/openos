@@ -54,7 +54,10 @@ char keyboard_getc() {
 
 char keyboard_scancode_to_ascii(uint8_t scancode) {
     switch (scancode) {
-    default:
+    case 0x1E:
         return 'A';
+    case 0x30:
+        return 'B';
     }
+    return ' ';
 }
