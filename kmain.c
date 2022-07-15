@@ -2,12 +2,10 @@
 #include "serial.h"
 #include "pic.h"
 #include "keyboard.h"
-#include "gdt.h"
 #include "idt.h"
 #include "interrupt.h"
 
 void kmain() {
-    gdt_init();
     pic_init();
     idt_init();
     enable_interrupt();

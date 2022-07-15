@@ -23,13 +23,13 @@ void idt_init() {
     idt_entry_t idt_entries[256] = {};
     idt_ptr_t idt;
     idt.base = (uint32_t) idt_entries;
-    idt.limit = sizeof(idt_entries);
+    idt.limit = sizeof(idt_entries) - 1;
 
     idt_entries[33].offset_low     = (uint32_t) interrupt_handler_33 & 0xFFFF;
     idt_entries[33].offset_high    = ((uint32_t) interrupt_handler_33 >> 16) & 0xFFFF;
     idt_entries[33].segsel         = 0x0008;
     idt_entries[33].zero           = 0x00;
-    idt_entries[33].config         = 0x8E;
+    idt_entries[33].config         = 0x8F;
 
     load_idt(&idt);
 }
